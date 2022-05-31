@@ -3,7 +3,6 @@ import { Button } from './Button';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import axios from 'axios'
-import { triggerBase64Download } from 'react-base64-downloader';
 
 const USERS_REST_API_URL = 'http://localhost:8080/api/user/getFile/6295e98cdb204534df165e82';
 
@@ -14,8 +13,7 @@ axios({
   responseType: 'blob',
 }).then((response) => {
   console.log(response.headers);
-  // const filename = response.headers.get('content-disposition');
-    const filename = 'AYE.txt'
+  const filename = 'AYE.txt'
   const url = window.URL.createObjectURL(new Blob([response.data]));
   const link = document.createElement('a');
   link.href = url;
@@ -25,16 +23,9 @@ axios({
 });
 }
 
-function local() {
-  localStorage.setItem()
-}
-
 function Navbar() {
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
-
-  const handleClick = () => setClick(!click);
-  const closeMobileMenu = () => setClick(false);
 
   const showButton = () => {
     if (window.innerWidth <= 960) {
@@ -64,36 +55,27 @@ function Navbar() {
                 to='/' 
                 className='nav-links'
               >
-                Home
+                Открытые вакансии
               </Link>
             </li>
             <li className='nav-item'>
               <Link
-                to='/services'
+                to='/messages'
                 className='nav-links'
               >
-                Services
+                Входящие заявки
               </Link>
             </li>
             <li className='nav-item'>
               <Link
-                to='/products'
+                to='/applications'
                 className='nav-links'
               >
-                Products
+                Поданые заявки
               </Link>
             </li>
-
-            {/* <li>
-              <Link
-                to='/sign-up'
-                className='nav-links-mobile'
-              >
-                Sign Up
-              </Link>
-            </li> */}
           </ul>
-          <Button buttonStyle='btn--outline' onClick={download}>Login</Button>
+          <Button buttonStyle='btn--outline'>Login</Button>
         </div>
       </nav>
     </>

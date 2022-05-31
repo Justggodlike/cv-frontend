@@ -1,0 +1,18 @@
+.cont {
+    margin: auto;
+}
+
+.form {
+    font-family: arial;
+    font-size: 18px;
+    margin: auto;
+    width: 350px;
+    height: 400px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.input {
+    margin: auto;
+}
