@@ -5,20 +5,17 @@ import './Navbar.css';
 import axios from 'axios'
 import { triggerBase64Download } from 'react-base64-downloader';
 
-const USERS_REST_API_URL = 'http://localhost:8080/api/user/getFile/629577ec6d7c7f0c89498588';
+const USERS_REST_API_URL = 'http://localhost:8080/api/user/getFile/6295e98cdb204534df165e82';
 
 function download() {
-//   axios.get(USERS_REST_API_URL).then((response) => {
-//     console.log(response);
-//     triggerBase64Download(response, 'name.docx')
-// });
 axios({
   url: USERS_REST_API_URL, //your url
   method: 'GET',
-  responseType: 'blob', // important
+  responseType: 'blob',
 }).then((response) => {
   console.log(response.headers);
-  const filename = response.headers.get('content-disposition');
+  // const filename = response.headers.get('content-disposition');
+    const filename = 'AYE.txt'
   const url = window.URL.createObjectURL(new Blob([response.data]));
   const link = document.createElement('a');
   link.href = url;
@@ -26,6 +23,10 @@ axios({
   document.body.appendChild(link);
   link.click();
 });
+}
+
+function local() {
+  localStorage.setItem()
 }
 
 function Navbar() {
@@ -53,16 +54,16 @@ function Navbar() {
     <>
       <nav className='navbar'>
         <div className='navbar-container'>
-          <Link to='/' className='navbar-logo' onClick={closeMobileMenu} sx={{ fontSize: '30px', fontWeight: '600' }}>
+          <Link to='/' className='navbar-logo' sx={{ fontSize: '30px', fontWeight: '600' }}>
             CV
             <i className='fab fa-typo3' />
           </Link>
-          <div className='menu-icon' onClick={handleClick}>
-            <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
-          </div>
-          <ul className={click ? 'nav-menu active' : 'nav-menu'}>
+          <ul className='nav-menu'>
             <li className='nav-item'>
-              <Link to='/' className='nav-links' onClick={closeMobileMenu}>
+              <Link 
+                to='/' 
+                className='nav-links'
+              >
                 Home
               </Link>
             </li>
@@ -70,7 +71,6 @@ function Navbar() {
               <Link
                 to='/services'
                 className='nav-links'
-                onClick={closeMobileMenu}
               >
                 Services
               </Link>
@@ -79,24 +79,21 @@ function Navbar() {
               <Link
                 to='/products'
                 className='nav-links'
-                onClick={closeMobileMenu}
               >
                 Products
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link
                 to='/sign-up'
                 className='nav-links-mobile'
-                onClick={closeMobileMenu}
               >
                 Sign Up
               </Link>
-            </li>
+            </li> */}
           </ul>
-          {button && <Button buttonStyle='btn--outline' onClick={download}>SIGN UP</Button>}
-          <Link to="/files/file.txt" target="_blank" download> DOWNLOAD </Link>
+          <Button buttonStyle='btn--outline' onClick={download}>Login</Button>
         </div>
       </nav>
     </>

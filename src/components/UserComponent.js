@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import { Form } from './Form';
 
 function stringToColor(string) {
     let hash = 0;
@@ -61,6 +62,7 @@ class UserComponent extends React.Component {
     render (){
         return (
             <div>
+                <Form />
                 <Box
                     sx={{
                         width: 0,
