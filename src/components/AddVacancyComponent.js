@@ -1,24 +1,26 @@
 import React from 'react';
+import MessageService from '../services/MessageService';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import axios from 'axios'
-import './LoginComponent.css';
+import Divider from '@mui/material/Divider';
+import './AddVacancyComponent.css';
 import {Link, Routes, Route, useNavigate} from 'react-router-dom';
-import UserService from '../services/UserService';
 
-class LoginComponent extends React.Component {
+class AddVacancyComponent extends React.Component {
 
     constructor(props){
         super(props)
         this.state = {
-            email: '',
-            password: ''
+            title: '',
+            company: '',
+            salary: '',
+            desc: ''
         }
     }
-
-    handleSubmit = event => {
-        event.preventDefault();
-        UserService.login(this.state.email, this.state.password);
-      };
 
     handleInputChange = event => {
         const target = event.target;
@@ -34,6 +36,7 @@ class LoginComponent extends React.Component {
     render (){
         return (
             <div>
+                <div>
                 <Box
                     sx={{
                         width: 0,
@@ -46,14 +49,13 @@ class LoginComponent extends React.Component {
                     }}
                 />
                 <div className='form'>
-                {/* <form onSubmit={this.handleSubmit} className='form'> */}
                 <label className='input'>
-                    email 
+                    title 
                     <input
                     className='input'
-                    name="email"
+                    name="title"
                     type="text"
-                    checked={this.state.email}
+                    checked={this.state.title}
                     onChange={this.handleInputChange} />
                 </label>
                 <Box
@@ -69,13 +71,55 @@ class LoginComponent extends React.Component {
                 />
                 <br />
                 <label className='input'>
-                    password
+                    salary
                     <input
                     className='input'
-                    name="password"
+                    name="salary"
                     type="text"
-                    checked={this.state.password}
+                    checked={this.state.salary}
                     onChange={this.handleInputChange} />
+                </label>
+                <Box
+                    sx={{
+                        width: 0,
+                        height: 10,
+                        backgroundColor: 'white',
+                        '&:hover': {
+                        backgroundColor: 'white',
+                        opacity: [0.9, 0.8, 0.7],
+                        },
+                    }}
+                />
+                <br />
+                <label className='input'>
+                    company
+                    <input
+                    className='input'
+                    name="company"
+                    type="text"
+                    checked={this.state.company}
+                    onChange={this.handleInputChange} />
+                </label>
+                <Box
+                    sx={{
+                        width: 0,
+                        height: 10,
+                        backgroundColor: 'white',
+                        '&:hover': {
+                        backgroundColor: 'white',
+                        opacity: [0.9, 0.8, 0.7],
+                        },
+                    }}
+                />
+                <br />
+                <label className='input'>
+                    desc
+                    <textarea name="body"
+                     className='input desc'
+                     name="desc"
+                     type="text"
+                     checked={this.state.desc}
+                     onChange={this.handleInputChange}/>
                 </label>
                 <Box
                     sx={{
@@ -93,16 +137,16 @@ class LoginComponent extends React.Component {
                 <Link
                     to='/'
                     className='navLink'
-                    // onClick={this.handleSubmit}
                 >
-                    Авторизация
+                    Опубликовать
                 </Link>
                 </div>
-                {/* </form> */}
                 </div>
             </div>
+            </div>
+
         )
     }
 }
 
-export default LoginComponent;
+export default AddVacancyComponent;

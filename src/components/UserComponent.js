@@ -8,8 +8,10 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import { Link } from 'react-router-dom';
 import { Form } from './Form';
 import './UserComponent.css'
+import { useNavigate } from "react-router-dom";
 
 function stringToColor(string) {
     let hash = 0;
@@ -38,18 +40,58 @@ function stringToColor(string) {
     };
   }
 
+//   function clickVac(id){
+//     let navigate = useNavigate(); 
+//     const routeChange = () =>{ 
+//         let path = 'vacancy/' + id; 
+//         navigate(path);
+//     }
+//   }
+
+//   function clickVac(id) {
+//     const navigate = useNavigate();
+//     let path = 'vacancy/' + id; 
+//     navigate(path);
+//   }
+
 class UserComponent extends React.Component {
 
     constructor(props){
         super(props)
         this.state = {
-            users:[]
+            vacancies:[]
         }
     }
 
+    clickVac() {
+        const navigate = this.useNavigate();
+        let path = 'vacancy/'; 
+        navigate(path);
+      }
+
     componentDidMount(){
-        UserService.getUsers().then((response) => {
-            this.setState({ users: response.data})
+        const email = localStorage.getItem('email');
+        const password = localStorage.getItem('password');
+        if(email != null && password != null) {
+            UserService.login(email, password);
+            localStorage.removeItem('email');
+            localStorage.removeItem('password');
+
+        }
+        const title = localStorage.getItem('title');
+        const salary = localStorage.getItem('salary');
+        const desc = localStorage.getItem('desc');
+        const company = localStorage.getItem('company');
+        if(title != null && salary != null && desc != null && company != null) {
+            UserService.createVacancy(title, salary, desc, company);
+            localStorage.removeItem('title');
+            localStorage.removeItem('salary');
+            localStorage.removeItem('company');
+            localStorage.removeItem('desc');
+
+        }
+        UserService.getVacancies().then((response) => {
+            this.setState({ vacancies: response.data})
         });
     }
 
@@ -88,15 +130,15 @@ class UserComponent extends React.Component {
                     }}
                 />
                     <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', px: '15%'}}>
-                        {/* {this.state.users.map((user) => */}
+                        {this.state.vacancies.map((vacancy) =>
                         <React.Fragment>
-                            <ListItem alignItems="flex-start">
+                            <ListItem alignItems="flex-start" >
                                 <ListItemAvatar>
-                                <Avatar {...stringAvatar('КИ')} />
+                                <Avatar {...stringAvatar(this.ifNullThenEmptyString(vacancy.company))} />
                                 </ListItemAvatar>
                                 <ListItemText
                                 sx={{ display: 'block', fontSize: '20px', fontWeight: '600' }}
-                                primary='Водитель-экспедитор (микроавтобус, категории B) - Кирего, ЧП'
+                                primary={vacancy.title.substring(0, 50) + " - " + vacancy.company}
                                 secondary={
                                     <React.Fragment>
                                     <Typography
@@ -105,7 +147,7 @@ class UserComponent extends React.Component {
                                         variant="body2"
                                         color="text.primary"
                                     >
-                                        {'Доставка товаров клиентам. Учет товаров на складе. Поддержание машины в чистом и рабочем состоянии. Работа с сопроводительными документами. Опыт вождения не менее 2 лет.'.substring(0, 500)}
+                                        {vacancy.desc.substring(0, 500)}
                                     </Typography>
                                     <Typography
                                         sx={{ display: 'block', paddingTop: '15px', fontSize: '20px', fontWeight: '600' }}
@@ -113,48 +155,23 @@ class UserComponent extends React.Component {
                                         variant="body2"
                                         color="text.primary"
                                     >
-                                        1000p
+                                        {vacancy.salary}
                                     </Typography>
                                     </React.Fragment>
                                     
                                 }
                                 />
                             </ListItem>
-                            <Divider variant="inset" component="li" />
-                            <ListItem alignItems="flex-start">
-                                <ListItemAvatar>
-                                <Avatar {...stringAvatar('SO')} />
-                                </ListItemAvatar>
-                                <ListItemText
-                                sx={{ display: 'block', fontSize: '20px', fontWeight: '600' }}
-                                primary='Frontend Developer/HTML-coder - SOFTSWISS'
-                                secondary={
-                                    <React.Fragment>
-                                    <Typography
-                                        sx={{ display: 'inline' }}
-                                        component="span"
-                                        variant="body2"
-                                        color="text.primary"
-                                    >
-                                        {'Работа с проектами на React. Работа с проектами на AngularJS (изначальное владение не обязательно). Разработка пользовательских интерфейсов. Уровень верстки - middle/senior. Уровень react - junior/middle. От 2-х лет опыта Frontend разработки. Высокий уровень знаний по HTML...'.substring(0, 500)}
-                                    </Typography>
-                                    <Typography
-                                        sx={{ display: 'block', paddingTop: '15px', fontSize: '20px', fontWeight: '600' }}
-                                        component="span"
-                                        variant="body2"
-                                        color="text.primary"
-                                    >
-                                        400$ - 1200$
-                                    </Typography>
-                                    </React.Fragment>
-                                    
-                                }
-                                />
-                            </ListItem>
+                            <Link
+                                to={'/vacancy/' + vacancy.id} 
+                                className='navLink'
+                            >
+                                Просмотреть...
+                            </Link>
                             <Divider variant="inset" component="li" />
                             </React.Fragment>
-                        {/* )} */}
-                    </List>
+                        )}
+                        </List>
                     <div className='divh'>
                     <Box
                     sx={{
@@ -167,7 +184,12 @@ class UserComponent extends React.Component {
                         },
                     }}
                 />
-                    <button class="button button1">Добавить вакансию...</button>
+                    <Link
+                        to='/vacancy/add' 
+                        className='navLink'
+                    >
+                        Добавить вакансию...
+                    </Link>
                 </div>
             </div>
         )
@@ -177,15 +199,15 @@ class UserComponent extends React.Component {
 export default UserComponent;
 
 {/* <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', px: '15%'}}>
-{this.state.users.map((user) =>
-<React.Fragment>
+{/* {this.state.users.map((user) => */}
+{/* <React.Fragment>
     <ListItem alignItems="flex-start">
         <ListItemAvatar>
-        <Avatar {...stringAvatar(this.ifNullThenEmptyString(user.fullName))} />
+        <Avatar {...stringAvatar('КИ')} />
         </ListItemAvatar>
         <ListItemText
         sx={{ display: 'block', fontSize: '20px', fontWeight: '600' }}
-        primary={user.email.substring(0, 50)}
+        primary='Водитель-экспедитор (микроавтобус, категории B) - Кирего, ЧП'
         secondary={
             <React.Fragment>
             <Typography
@@ -194,7 +216,38 @@ export default UserComponent;
                 variant="body2"
                 color="text.primary"
             >
-                {user.password + " — I'll be in your neighborhood doing errands this…".substring(0, 500)}
+                {'Доставка товаров клиентам. Учет товаров на складе. Поддержание машины в чистом и рабочем состоянии. Работа с сопроводительными документами. Опыт вождения не менее 2 лет.'.substring(0, 500)}
+            </Typography>
+            <Typography
+                sx={{ display: 'block', paddingTop: '15px', fontSize: '20px', fontWeight: '600' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+            >
+                1000p
+            </Typography>
+            </React.Fragment>
+            
+        }
+        />
+    </ListItem>
+    <Divider variant="inset" component="li" />
+    <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+        <Avatar {...stringAvatar('SO')} />
+        </ListItemAvatar>
+        <ListItemText
+        sx={{ display: 'block', fontSize: '20px', fontWeight: '600' }}
+        primary='Frontend Developer/HTML-coder - SOFTSWISS'
+        secondary={
+            <React.Fragment>
+            <Typography
+                sx={{ display: 'inline' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+            >
+                {'Работа с проектами на React. Работа с проектами на AngularJS (изначальное владение не обязательно). Разработка пользовательских интерфейсов. Уровень верстки - middle/senior. Уровень react - junior/middle. От 2-х лет опыта Frontend разработки. Высокий уровень знаний по HTML...'.substring(0, 500)}
             </Typography>
             <Typography
                 sx={{ display: 'block', paddingTop: '15px', fontSize: '20px', fontWeight: '600' }}
@@ -210,6 +263,6 @@ export default UserComponent;
         />
     </ListItem>
     <Divider variant="inset" component="li" />
-    </React.Fragment>
-)}
-</List> */}
+    </React.Fragment> */}
+{/* )} */}
+// </List>
