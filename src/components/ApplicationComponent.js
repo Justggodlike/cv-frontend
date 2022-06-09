@@ -7,6 +7,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import { Link } from 'react-router-dom';
 
 class ApplicationComponent extends React.Component {
 
@@ -38,15 +39,15 @@ class ApplicationComponent extends React.Component {
                     }}
                 />
                 <h1 className = "text-center"> Мои заявки </h1>
-                    <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', px: '15%'}}>
-                        {/* {this.state.messages.map((message) => */}
+                <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', px: '15%'}}>
+                        {this.state.messages.map((message) =>
                         <React.Fragment>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
                                 </ListItemAvatar>
                                 <ListItemText
                                 sx={{ display: 'block', fontSize: '20px', fontWeight: '600' }}
-                                primary={'Ответ на вакансию Software Engineer'}
+                                primary={message.title.substring(0, 50)}
                                 secondary={
                                     <React.Fragment>
                                     <Typography
@@ -55,15 +56,15 @@ class ApplicationComponent extends React.Component {
                                         variant="body2"
                                         color="text.primary"
                                     >
-                                        {'Добрый день, я бы хотел предложить свою кандидатуру на текущую позицию. К ответу прикрепляю резюме'.substring(0, 500)}
+                                        {message.desc.substring(0, 500)}
                                     </Typography>
                                     <Typography
-                                        sx={{ display: 'block', paddingTop: '10px', fontSize: '16px', fontWeight: '500' }}
+                                        sx={{ display: 'block', paddingTop: '15px', fontSize: '14px', fontWeight: '300' }}
                                         component="span"
                                         variant="body2"
                                         color="text.primary"
                                     >
-                                        Резюме.docx
+                                        {message.filename}
                                     </Typography>
                                     <Typography
                                         sx={{ display: 'block', paddingTop: '15px', fontSize: '20px', fontWeight: '600' }}
@@ -71,8 +72,14 @@ class ApplicationComponent extends React.Component {
                                         variant="body2"
                                         color="text.primary"
                                     >
-                                        To: 'Softwiss@gmail.com'
+                                        To: {message?.userTo?.email}
                                     </Typography>
+                                    <Link
+                                        to={'/message/' + message.id} 
+                                        className='navLink'
+                                    >
+                                        Просмотреть...
+                                    </Link>
                                     </React.Fragment>
                                     
                                 }
@@ -80,7 +87,7 @@ class ApplicationComponent extends React.Component {
                             </ListItem>
                             <Divider variant="inset" component="li" />
                             </React.Fragment>
-                        {/* )} */}
+                        )}
                     </List>
             </div>
 
@@ -126,3 +133,48 @@ export default ApplicationComponent;
                             </React.Fragment>
                         )}
                     </List> */}
+
+                //     <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', px: '15%'}}>
+                //     {/* {this.state.messages.map((message) => */}
+                //     <React.Fragment>
+                //         <ListItem alignItems="flex-start">
+                //             <ListItemAvatar>
+                //             </ListItemAvatar>
+                //             <ListItemText
+                //             sx={{ display: 'block', fontSize: '20px', fontWeight: '600' }}
+                //             primary={'Ответ на вакансию Software Engineer'}
+                //             secondary={
+                //                 <React.Fragment>
+                //                 <Typography
+                //                     sx={{ display: 'inline' }}
+                //                     component="span"
+                //                     variant="body2"
+                //                     color="text.primary"
+                //                 >
+                //                     {'Добрый день, я бы хотел предложить свою кандидатуру на текущую позицию. К ответу прикрепляю резюме'.substring(0, 500)}
+                //                 </Typography>
+                //                 <Typography
+                //                     sx={{ display: 'block', paddingTop: '10px', fontSize: '16px', fontWeight: '500' }}
+                //                     component="span"
+                //                     variant="body2"
+                //                     color="text.primary"
+                //                 >
+                //                     Резюме.docx
+                //                 </Typography>
+                //                 <Typography
+                //                     sx={{ display: 'block', paddingTop: '15px', fontSize: '20px', fontWeight: '600' }}
+                //                     component="span"
+                //                     variant="body2"
+                //                     color="text.primary"
+                //                 >
+                //                     To: 'Softwiss@gmail.com'
+                //                 </Typography>
+                //                 </React.Fragment>
+                                
+                //             }
+                //             />
+                //         </ListItem>
+                //         <Divider variant="inset" component="li" />
+                //         </React.Fragment>
+                //     {/* )} */}
+                // </List>

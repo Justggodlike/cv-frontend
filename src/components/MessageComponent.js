@@ -7,6 +7,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import { Link } from 'react-router-dom';
 
 class MessageComponent extends React.Component {
 
@@ -44,16 +45,16 @@ class MessageComponent extends React.Component {
                         },
                     }}
                 />
-                <h1 className = "text-center"> Inbox </h1>
-                    <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', px: '15%'}}>
-                        {this.state.users.map((user) =>
+                <h1 className = "text-center"> Входящие </h1>
+                <List sx={{ width: '100%', maxWidth: '100%', bgcolor: 'background.paper', px: '15%'}}>
+                        {this.state.messages.map((message) =>
                         <React.Fragment>
                             <ListItem alignItems="flex-start">
                                 <ListItemAvatar>
                                 </ListItemAvatar>
                                 <ListItemText
                                 sx={{ display: 'block', fontSize: '20px', fontWeight: '600' }}
-                                primary={user.email.substring(0, 50)}
+                                primary={message.title.substring(0, 50)}
                                 secondary={
                                     <React.Fragment>
                                     <Typography
@@ -62,7 +63,7 @@ class MessageComponent extends React.Component {
                                         variant="body2"
                                         color="text.primary"
                                     >
-                                        {" — I'll be in your neighborhood doing errands this…".substring(0, 500)}
+                                        {message.desc.substring(0, 500)}
                                     </Typography>
                                     <Typography
                                         sx={{ display: 'block', paddingTop: '15px', fontSize: '20px', fontWeight: '600' }}
@@ -70,8 +71,14 @@ class MessageComponent extends React.Component {
                                         variant="body2"
                                         color="text.primary"
                                     >
-                                        400$ - 1200$
+                                        To: {message?.userFrom?.email}
                                     </Typography>
+                                    <Link
+                                        to={'/message/' + message.id} 
+                                        className='navLink'
+                                    >
+                                        Просмотреть...
+                                    </Link>
                                     </React.Fragment>
                                     
                                 }
